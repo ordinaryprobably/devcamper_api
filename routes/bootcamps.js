@@ -1,4 +1,5 @@
 const express = require('express');
+const courseRouter = require('./courses');
 const router = express.Router();
 const { 
   getBootcamps, 
@@ -8,6 +9,12 @@ const {
   deleteBootcamp,
   getBootcampsInRadius,
 } = require('../controllers/bootcamps');
+
+/**
+ * @description When '/api/v1/bootcamps/:bootcampId/courses' hits, 
+ *              use the router function in ./courses.js 
+ */
+router.use('/:bootcampId/courses', courseRouter);
 
 /**
  * @route /api/v1/bootcamps
