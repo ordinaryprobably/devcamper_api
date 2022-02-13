@@ -132,6 +132,15 @@ bootcampSchema.pre('save', async function(next) {
 });
 
 /**
+ * Cascade Delete courses when a bootcamp is deleted.
+ * (removing all courses related to the to-be-removed-bootcamp)
+ */
+bootcampSchema.pre('remove', async function(next) {
+  await this.model('Course').deleteMany({ bootcamp: this._id });
+  next();
+});
+
+/**
  * Reverse-Populate with virtuals
  */
 bootcampSchema.virtual('courses', {
