@@ -97,7 +97,11 @@ const bootcampSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-});
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+}
+);
 
 /**
  * Create Bootcamp SLUG from its name before saving to the DB.
@@ -125,6 +129,16 @@ bootcampSchema.pre('save', async function(next) {
   };
   this.address = undefined;
   next();
+});
+
+/**
+ * Reverse-Populate with virtuals
+ */
+bootcampSchema.virtual('courses', {
+  ref: 'Course',
+  localField: '_id',
+  foreignField: 'bootcamp',
+  justOne: false,
 })
 
 module.exports = mongoose.model('Bootcamp', bootcampSchema);
