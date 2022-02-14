@@ -2,6 +2,10 @@ const express = require('express');
 const { getCourses, getSingleCourse, createCourse, updateCourse, deleteCourse } = require('../controllers/courses');
 const router = express.Router({ mergeParams: true });
 
+/**
+ * @route /api/v1/courses
+ * @route /api/v1/bootcamp/:bootcampId/courses
+ */
 router.route('/')
   .get(getCourses)
   .post(createCourse);

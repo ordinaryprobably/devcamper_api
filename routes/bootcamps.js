@@ -8,11 +8,12 @@ const {
   updateBootcamp, 
   deleteBootcamp,
   getBootcampsInRadius,
+  uploadPhotoBootcamp,
 } = require('../controllers/bootcamps');
 
 /**
- * @description When '/api/v1/bootcamps/:bootcampId/courses' hits, 
- *              use the router function in ./courses.js 
+ * @description /bootcamps/:bootcampId/courses 로 들어오는 요청은
+ *              courseRouter 의 함수를 사용하겠다는 의미다. 
  */
 router.use('/:bootcampId/courses', courseRouter);
 
@@ -23,6 +24,10 @@ router
   .route('/radius/:zipcode/:distance')
   .get(getBootcampsInRadius);
   
+router
+  .route('/:id/photo')
+  .put(uploadPhotoBootcamp);
+
 router
   .route('/')
   .get(getBootcamps)
