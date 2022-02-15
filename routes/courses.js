@@ -3,6 +3,7 @@ const router = express.Router({ mergeParams: true });
 const Course = require('../models/Course');
 const advancedResults = require('../middleware/advancedResults');
 const { getCourses, getSingleCourse, createCourse, updateCourse, deleteCourse } = require('../controllers/courses');
+const { protect } = require('../middleware/auth');
 
 /**
  * @route /api/v1/courses
@@ -10,12 +11,12 @@ const { getCourses, getSingleCourse, createCourse, updateCourse, deleteCourse } 
  */
 router.route('/')
   .get(advancedResults(Course, { path: 'bootcamp', select: 'name description'}) ,getCourses)
-  .post(createCourse);
+  .post(protect, createCourse);
 
 router.route('/:id')
   .get(getSingleCourse)
-  .put(updateCourse)
-  .delete(deleteCourse);
+  .put(protect, updateCourse)
+  .delete(protect, deleteCourse);
 
 module.exports = router;
 

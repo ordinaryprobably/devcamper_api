@@ -16,9 +16,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     role
   });
 
-  const token = user.getSignedJwtToken();
-
-  res.status(200).json({ success: true, token });
+  sendTokenResponse(user, 200, res);
 })
 
 /**
@@ -44,7 +42,30 @@ exports.register = asyncHandler(async (req, res, next) => {
   if(!isMatch) {
     return next(new ErrorResponse(`Wrong password`, 401));
   }
-  const token = user.getSignedJwtToken();
-
-  res.status(200).json({ success: true, token });
+  
+  sendTokenResponse(user, 200, res);
 });
+
+/**
+ * @description Get token from model,
+ *              create cookie and send response.
+ */
+function sendTokenResponse(userInstance, statusCode, res) {
+  const token = userInstance.getSignedJwtToken();
+  const cookieOptions = {
+    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
+    httpOnly: true
+  }
+
+  if(process.env.NODE_ENV === 'production') {
+    cookieOptions.secure = true;
+  }
+
+  res
+    .status(statusCode)
+    .cookie('token', token, cookieOptions)
+    .json({
+      success: true,
+      token,
+    });
+}
