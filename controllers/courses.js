@@ -1,6 +1,6 @@
 const asyncHandler = require('../middleware/async');
 const Bootcamp = require('../models/Bootcamp');
-const Course = require('../models/course');
+const Course = require('../models/Course');
 const ErrorResponse = require('../utils/errorResponse');
 
 /**
@@ -10,21 +10,13 @@ const ErrorResponse = require('../utils/errorResponse');
  * @access      Public
  */
 exports.getCourses = asyncHandler(async (req, res, next) => {
-  let finalQuery;
-
   if(req.params.bootcampId) {
-    finalQuery = Course.find({ bootcamp: req.params.bootcampId });
+    const courses = await Course.find({ bootcamp: req.params.bootcampId });
+
+    return res.status(200).json({ success: true, count: courses.length, data: courses});
   } else {
-    finalQuery = Course.find().populate({ path: 'bootcamp', select: 'name description'});
+    res.status(200).json(res.advancedResults);
   }
-
-  const courses = await finalQuery;
-
-  res.status(200).json({
-    success: true,
-    count: courses.length,
-    data: courses,
-  })
 });
 
 /**
