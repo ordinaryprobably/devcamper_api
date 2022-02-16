@@ -16,7 +16,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     role
   });
 
-  sendTokenResponse(user, 200, res);
+  sendTokenWithResponse(user, 200, res);
 })
 
 /**
@@ -43,7 +43,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`Wrong password`, 401));
   }
   
-  sendTokenResponse(user, 200, res);
+  sendTokenWithResponse(user, 200, res);
 });
 
 /**
@@ -65,7 +65,7 @@ exports.getMe = asyncHandler(async (req, res, next) => {
  * @description Get token from model,
  *              create cookie and send response.
  */
-function sendTokenResponse(userInstance, statusCode, res) {
+function sendTokenWithResponse(userInstance, statusCode, res) {
   const token = userInstance.getSignedJwtToken();
   const cookieOptions = {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),

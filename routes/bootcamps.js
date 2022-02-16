@@ -12,7 +12,7 @@ const {
   getBootcampsInRadius,
   uploadPhotoBootcamp,
 } = require('../controllers/bootcamps');
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 /**
  * @description /bootcamps/:bootcampId/courses 로 들어오는 요청은
@@ -29,18 +29,18 @@ router
   
 router
   .route('/:id/photo')
-  .put(protect, uploadPhotoBootcamp);
+  .put(protect, authorize('publisher', 'admin'), uploadPhotoBootcamp);
 
 router
   .route('/')
   .get(advancedResults(Bootcamp, 'courses') ,getBootcamps)
-  .post(protect, createBootcamp);
+  .post(protect, authorize('publisher', 'admin'), createBootcamp);
 
 router 
   .route('/:id')
   .get(getSingleBootcamp)
-  .put(protect, updateBootcamp)
-  .delete(protect, deleteBootcamp);
+  .put(protect, authorize('publisher', 'admin'), updateBootcamp)
+  .delete(protect, authorize('publisher', 'admin'), deleteBootcamp);
 
 module.exports = router;
 
