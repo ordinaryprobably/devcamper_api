@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, getMe } = require('../controllers/auth');
+const { register, login, getMe, forgotPassword } = require('../controllers/auth');
 const { protect } = require('../middleware/auth');
 const courseRouter = require('./courses');
 const router = express.Router();
@@ -16,4 +16,6 @@ router.route('/login')
 router.route('/me')
   .get(protect, getMe);
 
+router.route('/forgotPassword')
+  .post(forgotPassword);
 module.exports = router;

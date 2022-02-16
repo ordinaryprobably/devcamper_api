@@ -60,6 +60,26 @@ exports.getMe = asyncHandler(async (req, res, next) => {
   })
 })
 
+/**
+ * @description Forgot password
+ * @route       POST /api/v1/auth/forgotpassword
+ * @access      Public
+ */
+ exports.forgotPassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if(!user) {
+    return next(new ErrorResponse(`There is no user with ${req.body.email}`, 404))
+  }
+
+  const resetToken = user.getResetPasswordToken();
+console.log(resetToken)
+  res.status(200).json({
+    success: true,
+    data: user
+  })
+})
+
 
 /**
  * @description Get token from model,
